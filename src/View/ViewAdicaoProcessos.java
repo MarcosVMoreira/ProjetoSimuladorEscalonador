@@ -14,16 +14,17 @@ import java.util.LinkedList;
  * @author root
  */
 public class ViewAdicaoProcessos extends javax.swing.JFrame {
-    
+
     private ModelProcesso modelProcesso;
     private LinkedList<ModelProcesso> listaProcesso;
     private ControllerAdicaoProcessos controllerAdicaoProcessos;
     private int contador;
-    
+    private ViewEscalonador viewEscalonador;
+
     public ViewAdicaoProcessos() {
         initComponents();
         setLocationRelativeTo(null);
-        
+
         contador = 1;
         modelProcesso = new ModelProcesso();
         listaProcesso = new LinkedList<>();
@@ -53,9 +54,10 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        txtIniciar = new javax.swing.JButton();
+        btnIniciar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Adição de processos");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -88,22 +90,20 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)
-                                .addComponent(rdBtnCPU)
-                                .addComponent(txtTempoExecucao, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(rdBtnES))
-                        .addContainerGap(1, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)
+                        .addComponent(rdBtnCPU)
+                        .addComponent(txtTempoExecucao, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rdBtnES)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(btnGeraLista, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                             .addComponent(btnAdicionar)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnRemover)))))
+                            .addComponent(btnRemover))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,7 +144,12 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        txtIniciar.setText("Iniciar escalonador");
+        btnIniciar.setText("Iniciar escalonador");
+        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -160,7 +165,7 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
                         .addComponent(jLabel4))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(138, 138, 138)
-                        .addComponent(txtIniciar)))
+                        .addComponent(btnIniciar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -171,7 +176,7 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtIniciar)
+                .addComponent(btnIniciar)
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
@@ -201,6 +206,7 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
         modelProcesso.setNumeroProcesso(contador);
         modelProcesso.setTempoExecucao(Integer.parseInt(txtTempoExecucao.getText()));
+        System.out.println("botao apertado");
 
         //Se tipoProcesso for false, é do CPU. Se for true, é I/O
         if (rdBtnCPU.isSelected()) {
@@ -208,11 +214,21 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
         } else if (rdBtnES.isSelected()) {
             modelProcesso.setTipoProcesso(true);
         }
-        
+
         controllerAdicaoProcessos.adicionaNaListaController(modelProcesso);
-        
+
+        System.out.println("modelProcesso 1 " + modelProcesso.getNumeroProcesso());
+
+        System.out.println("modelProcesso 2 " + modelProcesso.getTempoExecucao());
+
+        System.out.println("modelProcesso 3 " + modelProcesso.isTipoProcesso());
         contador++;
     }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
+        viewEscalonador = new ViewEscalonador(listaProcesso);
+
+    }//GEN-LAST:event_btnIniciarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,6 +268,7 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnGeraLista;
+    private javax.swing.JButton btnIniciar;
     private javax.swing.JButton btnRemover;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -263,7 +280,6 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JRadioButton rdBtnCPU;
     private javax.swing.JRadioButton rdBtnES;
-    private javax.swing.JButton txtIniciar;
     private javax.swing.JTextField txtTempoExecucao;
     // End of variables declaration//GEN-END:variables
 }
