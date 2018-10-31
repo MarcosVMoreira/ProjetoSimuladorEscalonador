@@ -17,7 +17,7 @@ public class ControllerAdicaoProcessos {
     private LinkedList<ModelProcesso> listaProcessos;
 
     public ControllerAdicaoProcessos(LinkedList<ModelProcesso> lista) {
-        listaProcessos = new LinkedList<>(lista);
+        listaProcessos = lista;
     }
 
     public void adicionaNaListaController(ModelProcesso processo) {

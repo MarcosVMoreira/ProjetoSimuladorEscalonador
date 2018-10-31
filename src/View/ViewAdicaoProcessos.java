@@ -8,6 +8,9 @@ package View;
 import Controller.ControllerAdicaoProcessos;
 import Model.ModelProcesso;
 import java.util.LinkedList;
+import javax.swing.ButtonGroup;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -28,6 +31,11 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
         contador = 1;
         modelProcesso = new ModelProcesso();
         listaProcesso = new LinkedList<>();
+        controllerAdicaoProcessos = new ControllerAdicaoProcessos(listaProcesso);
+
+        ButtonGroup myButtonGroup = new ButtonGroup();
+        myButtonGroup.add(rdBtnCPU);
+        myButtonGroup.add(rdBtnES);
         controllerAdicaoProcessos = new ControllerAdicaoProcessos(listaProcesso);
     }
 
@@ -53,7 +61,7 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbTabela = new javax.swing.JTable();
         btnIniciar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -78,10 +86,20 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
         });
 
         btnRemover.setText("Remover");
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Tipo de processo:");
 
         btnGeraLista.setText("Usar lista sugerida");
+        btnGeraLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGeraListaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -134,7 +152,7 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel4.setText("Tabela de Processos");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbTabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -142,7 +160,7 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
                 "Nº do processo", "Tipo de processo", "Tempo de execução"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbTabela);
 
         btnIniciar.setText("Iniciar escalonador");
         btnIniciar.addActionListener(new java.awt.event.ActionListener() {
@@ -204,9 +222,10 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        modelProcesso = new ModelProcesso();
+
         modelProcesso.setNumeroProcesso(contador);
         modelProcesso.setTempoExecucao(Integer.parseInt(txtTempoExecucao.getText()));
-        System.out.println("botao apertado");
 
         //Se tipoProcesso for false, é do CPU. Se for true, é I/O
         if (rdBtnCPU.isSelected()) {
@@ -217,11 +236,17 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
 
         controllerAdicaoProcessos.adicionaNaListaController(modelProcesso);
 
-        System.out.println("modelProcesso 1 " + modelProcesso.getNumeroProcesso());
+        System.out.println("\nAdicionado: ");
 
-        System.out.println("modelProcesso 2 " + modelProcesso.getTempoExecucao());
+        for (int i = 0; i < listaProcesso.size(); i++) {
+            System.out.println("\n");
+            System.out.println(listaProcesso.get(i).getNumeroProcesso());
+            System.out.println(listaProcesso.get(i).isTipoProcesso());
+            System.out.println(listaProcesso.get(i).getTempoExecucao());
+        }
 
-        System.out.println("modelProcesso 3 " + modelProcesso.isTipoProcesso());
+        addRowToJTable();
+
         contador++;
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
@@ -229,6 +254,24 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
         viewEscalonador = new ViewEscalonador(listaProcesso);
 
     }//GEN-LAST:event_btnIniciarActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        System.out.println("Removendo posicao " + (tbTabela.getSelectedRow() + 1) + " da lista");
+
+        for (int i = 0; i < listaProcesso.size(); i++) {
+            System.out.println("\n");
+            System.out.println(listaProcesso.get(i).getNumeroProcesso());
+            System.out.println(listaProcesso.get(i).isTipoProcesso());
+            System.out.println(listaProcesso.get(i).getTempoExecucao());
+        }
+
+        listaProcesso.remove(tbTabela.getSelectedRow());
+        addRowToJTable();
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnGeraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeraListaActionPerformed
+        //CRIAR UMA LISTA GENERICA AQUI    
+    }//GEN-LAST:event_btnGeraListaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -263,7 +306,30 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
                 new ViewAdicaoProcessos().setVisible(true);
             }
         });
+
     }
+
+    public void addRowToJTable() {
+        clearTable(tbTabela);
+        DefaultTableModel model = (DefaultTableModel) tbTabela.getModel();
+        Object rowData[] = new Object[4];
+        for (int i = 0; i < listaProcesso.size(); i++) {
+            rowData[0] = listaProcesso.get(i).getNumeroProcesso();
+            if (listaProcesso.get(i).isTipoProcesso()) {
+                rowData[1] = "I/O";
+            } else {
+                rowData[1] = "CPU";
+            }
+            rowData[2] = listaProcesso.get(i).getTempoExecucao();
+            model.addRow(rowData);
+        }
+    }
+
+    public void clearTable(JTable tabela) {
+        tbTabela = tabela;
+        tbTabela.setModel(new DefaultTableModel(null, new String[]{"Nº do processo", "Tipo de processo", "Tempo de execução"}));
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
@@ -277,9 +343,9 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JRadioButton rdBtnCPU;
     private javax.swing.JRadioButton rdBtnES;
+    private javax.swing.JTable tbTabela;
     private javax.swing.JTextField txtTempoExecucao;
     // End of variables declaration//GEN-END:variables
 }

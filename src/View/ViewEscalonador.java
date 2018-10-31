@@ -27,7 +27,7 @@ public class ViewEscalonador extends javax.swing.JFrame {
         listaPrincipal = new LinkedList<ModelProcesso>();
         listaPrincipal = lista;
         initComponents();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < listaPrincipal.size(); i++) {
             System.out.println("lista dentro do viewEscalonador");
             System.out.println(listaPrincipal.get(i).getNumeroProcesso());
         }
