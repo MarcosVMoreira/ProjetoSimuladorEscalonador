@@ -8,7 +8,9 @@ package View;
 import Controller.ControllerAdicaoProcessos;
 import Model.ModelProcesso;
 import java.util.LinkedList;
+import java.util.Random;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,7 +25,8 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     private ControllerAdicaoProcessos controllerAdicaoProcessos;
     private int contador;
     private ViewEscalonador viewEscalonador;
-
+    private Random gerador = new Random();
+    
     public ViewAdicaoProcessos() {
         initComponents();
         setLocationRelativeTo(null);
@@ -69,6 +72,7 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        rdBtnCPU.setSelected(true);
         rdBtnCPU.setText("Orientado a CPU");
 
         rdBtnES.setText("Orientado a E/S");
@@ -94,7 +98,7 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
 
         jLabel3.setText("Tipo de processo:");
 
-        btnGeraLista.setText("Usar lista sugerida");
+        btnGeraLista.setText("Gerar lista aleatória");
         btnGeraLista.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGeraListaActionPerformed(evt);
@@ -108,19 +112,18 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel3)
-                        .addComponent(rdBtnCPU)
-                        .addComponent(txtTempoExecucao, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(rdBtnCPU)
                     .addComponent(rdBtnES)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(btnGeraLista, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                             .addComponent(btnAdicionar)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnRemover))))
+                            .addComponent(btnRemover)))
+                    .addComponent(txtTempoExecucao, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -195,7 +198,7 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnIniciar)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -256,21 +259,47 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        System.out.println("Removendo posicao " + (tbTabela.getSelectedRow() + 1) + " da lista");
+        if(tbTabela.getSelectedRow() == -1)
+            JOptionPane.showMessageDialog(null, "Selecione um processo para remover", "ERRO", JOptionPane.WARNING_MESSAGE);
+        else
+        {
+            System.out.println("Removendo posicao " + (tbTabela.getSelectedRow() + 1) + " da lista");
 
-        for (int i = 0; i < listaProcesso.size(); i++) {
+            for (int i = 0; i < listaProcesso.size(); i++) {
+                System.out.println("\n");
+                System.out.println(listaProcesso.get(i).getNumeroProcesso());
+                System.out.println(listaProcesso.get(i).isTipoProcesso());
+                System.out.println(listaProcesso.get(i).getTempoExecucao());
+            }
+
+            listaProcesso.remove(tbTabela.getSelectedRow());
+            addRowToJTable();
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnGeraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeraListaActionPerformed
+        for(int j = 0; j < 6; j++)
+        {
+            modelProcesso = new ModelProcesso();
+            int aux = gerador.nextInt(26) + 1;
+            modelProcesso.setNumeroProcesso(contador);
+            modelProcesso.setTempoExecucao(aux);
+            if(aux%2 == 0)
+                modelProcesso.setTipoProcesso(false);
+            else
+                modelProcesso.setTipoProcesso(true);
+            controllerAdicaoProcessos.adicionaNaListaController(modelProcesso);
+            contador++;
+            addRowToJTable();
+        }
+        
+        for (int i = 0; i < listaProcesso.size(); i++)
+        {
             System.out.println("\n");
             System.out.println(listaProcesso.get(i).getNumeroProcesso());
             System.out.println(listaProcesso.get(i).isTipoProcesso());
             System.out.println(listaProcesso.get(i).getTempoExecucao());
         }
-
-        listaProcesso.remove(tbTabela.getSelectedRow());
-        addRowToJTable();
-    }//GEN-LAST:event_btnRemoverActionPerformed
-
-    private void btnGeraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeraListaActionPerformed
-        //CRIAR UMA LISTA GENERICA AQUI    
     }//GEN-LAST:event_btnGeraListaActionPerformed
 
     /**
