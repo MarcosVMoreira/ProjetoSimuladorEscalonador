@@ -24,9 +24,9 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     private LinkedList<ModelProcesso> listaProcesso;
     private ControllerAdicaoProcessos controllerAdicaoProcessos;
     private int contador;
-    private ViewEscalonador viewEscalonador;
+
     private Random gerador = new Random();
-    
+
     public ViewAdicaoProcessos() {
         initComponents();
         setLocationRelativeTo(null);
@@ -239,38 +239,21 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
 
         controllerAdicaoProcessos.adicionaNaListaController(modelProcesso);
 
-        System.out.println("\nAdicionado: ");
-
-        for (int i = 0; i < listaProcesso.size(); i++) {
-            System.out.println("\n");
-            System.out.println(listaProcesso.get(i).getNumeroProcesso());
-            System.out.println(listaProcesso.get(i).isTipoProcesso());
-            System.out.println(listaProcesso.get(i).getTempoExecucao());
-        }
-
         addRowToJTable();
 
         contador++;
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-        viewEscalonador = new ViewEscalonador(listaProcesso);
+        ViewEscalonador viewEscalonador = new ViewEscalonador(listaProcesso);
+        viewEscalonador.setVisible(true);
 
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        if(tbTabela.getSelectedRow() == -1)
+        if (tbTabela.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(null, "Selecione um processo para remover", "ERRO", JOptionPane.WARNING_MESSAGE);
-        else
-        {
-            System.out.println("Removendo posicao " + (tbTabela.getSelectedRow() + 1) + " da lista");
-
-            for (int i = 0; i < listaProcesso.size(); i++) {
-                System.out.println("\n");
-                System.out.println(listaProcesso.get(i).getNumeroProcesso());
-                System.out.println(listaProcesso.get(i).isTipoProcesso());
-                System.out.println(listaProcesso.get(i).getTempoExecucao());
-            }
+        } else {
 
             listaProcesso.remove(tbTabela.getSelectedRow());
             addRowToJTable();
@@ -278,28 +261,25 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnGeraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeraListaActionPerformed
-        for(int j = 0; j < 6; j++)
-        {
+        for (int j = 0; j < 6; j++) {
             modelProcesso = new ModelProcesso();
-            int aux = gerador.nextInt(26) + 1;
+            
+            int aux = gerador.nextInt(300) + 1;
+            
             modelProcesso.setNumeroProcesso(contador);
             modelProcesso.setTempoExecucao(aux);
-            if(aux%2 == 0)
+            
+            if (aux % 2 == 0) {
                 modelProcesso.setTipoProcesso(false);
-            else
+            } else {
                 modelProcesso.setTipoProcesso(true);
+            }
+            
             controllerAdicaoProcessos.adicionaNaListaController(modelProcesso);
             contador++;
             addRowToJTable();
         }
-        
-        for (int i = 0; i < listaProcesso.size(); i++)
-        {
-            System.out.println("\n");
-            System.out.println(listaProcesso.get(i).getNumeroProcesso());
-            System.out.println(listaProcesso.get(i).isTipoProcesso());
-            System.out.println(listaProcesso.get(i).getTempoExecucao());
-        }
+
     }//GEN-LAST:event_btnGeraListaActionPerformed
 
     /**

@@ -7,6 +7,12 @@ package View;
 
 import Model.ModelProcesso;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,7 +23,20 @@ public class ViewEscalonador extends javax.swing.JFrame {
     /**
      * Creates new form ViewEscalonador
      */
-    LinkedList<ModelProcesso> listaPrincipal;
+    private LinkedList<ModelProcesso> listaPrincipal;
+
+    private LinkedList<ModelProcesso> lista1;
+    private LinkedList<ModelProcesso> lista2 = new LinkedList<>();
+    private LinkedList<ModelProcesso> lista3 = new LinkedList<>();
+    private LinkedList<ModelProcesso> lista4 = new LinkedList<>();
+    private LinkedList<ModelProcesso> lista5 = new LinkedList<>();
+    private LinkedList<ModelProcesso> lista6 = new LinkedList<>();
+    private LinkedList<ModelProcesso> lista7 = new LinkedList<>();
+    private LinkedList<ModelProcesso> lista8 = new LinkedList<>();
+
+    int contaLista1 = 0, contaLista2 = 0, contaLista3 = 0, contaLista4 = 0, contaLista5 = 0, contaLista6 = 0, contaLista7 = 0, contaLista8 = 0;
+
+    boolean fim = false;
 
     public ViewEscalonador() {
         initComponents();
@@ -27,10 +46,11 @@ public class ViewEscalonador extends javax.swing.JFrame {
         listaPrincipal = new LinkedList<ModelProcesso>();
         listaPrincipal = lista;
         initComponents();
-        for (int i = 0; i < listaPrincipal.size(); i++) {
-            System.out.println("lista dentro do viewEscalonador");
-            System.out.println(listaPrincipal.get(i).getNumeroProcesso());
-        }
+
+        addRowToJTable(tbFila1, listaPrincipal);
+        lista1 = new LinkedList<>(listaPrincipal);
+
+        /* processos na fila 1 executam por 2 quantums. Na fila 2, por 4 quantums. Na 3, por 8 quantums, etc. */
     }
 
     /**
@@ -62,10 +82,10 @@ public class ViewEscalonador extends javax.swing.JFrame {
         jScrollPane6 = new javax.swing.JScrollPane();
         tbFila6 = new javax.swing.JTable();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbFila7 = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane8 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tbFila8 = new javax.swing.JTable();
         jScrollPane9 = new javax.swing.JScrollPane();
         tbFIlaIO = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
@@ -149,7 +169,7 @@ public class ViewEscalonador extends javax.swing.JFrame {
         ));
         jScrollPane6.setViewportView(tbFila6);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbFila7.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -157,11 +177,11 @@ public class ViewEscalonador extends javax.swing.JFrame {
                 "Nº do processo", "Tipo de processo", "Tempo de execução"
             }
         ));
-        jScrollPane7.setViewportView(jTable1);
+        jScrollPane7.setViewportView(tbFila7);
 
         jLabel8.setText("Fila 8");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tbFila8.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -169,7 +189,7 @@ public class ViewEscalonador extends javax.swing.JFrame {
                 "Nº do processo", "Tipo de processo", "Tempo de execução"
             }
         ));
-        jScrollPane8.setViewportView(jTable2);
+        jScrollPane8.setViewportView(tbFila8);
 
         tbFIlaIO.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -184,8 +204,18 @@ public class ViewEscalonador extends javax.swing.JFrame {
         jLabel9.setText("Fila de I/O");
 
         btnGerarQuantum.setText("Gerar quantum");
+        btnGerarQuantum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerarQuantumActionPerformed(evt);
+            }
+        });
 
         btnAutomatico.setText("Quantum automático");
+        btnAutomatico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAutomaticoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -293,6 +323,42 @@ public class ViewEscalonador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnGerarQuantumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarQuantumActionPerformed
+        // TODO add your handling code here:
+        ciclaInstrucao();
+    }//GEN-LAST:event_btnGerarQuantumActionPerformed
+
+    private void btnAutomaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutomaticoActionPerformed
+        // TODO add your handling code here:
+        while (!fim) {
+            System.out.println("entrei");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ViewEscalonador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        
+//        Thread t1 = new Thread() {
+//            public void run() {
+//                for (int i = 0; i < maximo && flag; i++) {
+//                    for (int j = 0; j < maximo; j++) {
+//                        Math.sqrt(i * j);
+//                        Math.sqrt(j * i);
+//                    }
+//                    pgbBarra.setValue(i);
+//                }
+//                pgbBarra.setValue(maximo);
+//            }
+//        };
+//
+//        t1.start();
+        
+        fim = false;
+    }//GEN-LAST:event_btnAutomaticoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -326,7 +392,177 @@ public class ViewEscalonador extends javax.swing.JFrame {
                 new ViewEscalonador().setVisible(true);
             }
         });
+
     }
+
+    public void addRowToJTable(JTable tabela, LinkedList<ModelProcesso> lista) {
+
+        clearTable(tabela);
+        DefaultTableModel model = (DefaultTableModel) tabela.getModel();
+        Object rowData[] = new Object[4];
+        for (int i = 0; i < lista.size(); i++) {
+            rowData[0] = lista.get(i).getNumeroProcesso();
+            rowData[1] = lista.get(i).isTipoProcesso();
+            rowData[2] = lista.get(i).getTempoExecucao();
+            model.addRow(rowData);
+        }
+    }
+
+    public void clearTable(JTable tabela) {
+        tabela.setModel(new DefaultTableModel(null, new String[]{"Nº do processo", "Tipo de processo", "Tempo de execução"}));
+    }
+
+    public void ciclaInstrucao() {
+
+        /* logica: terei 8 listas, uma para cada fila. Sempre que eu ciclar e acabar o tempo numa lista, eu puxo o elemento pra proxima lista e reduzo o time dele se tvier time >0 */
+ /* ficarei plotando as 8 listas nas 8 taberlas sempre */
+        if (lista1.size() > 0) {
+
+            contaLista1++;
+
+            lista1.get(0).setTempoExecucao(lista1.get(0).getTempoExecucao() - 1);
+
+            if (lista1.get(0).getTempoExecucao() <= 0) {
+                contaLista2 = 0;
+                lista1.remove(0);
+            }
+
+            if (contaLista1 == 2) {
+                contaLista1 = 0;
+                lista2.add(lista1.get(0));
+                lista1.remove(0);
+            }
+
+        } else if (lista2.size() > 0) {
+
+            contaLista2++;
+
+            lista2.get(0).setTempoExecucao(lista2.get(0).getTempoExecucao() - 1);
+
+            if (lista2.get(0).getTempoExecucao() <= 0) {
+                contaLista2 = 0;
+                lista2.remove(0);
+
+            }
+
+            if (contaLista2 == 4) {
+                contaLista2 = 0;
+                lista3.add(lista2.get(0));
+                lista2.remove(0);
+            }
+        } else if (lista3.size() > 0) {
+
+            contaLista3++;
+
+            lista3.get(0).setTempoExecucao(lista3.get(0).getTempoExecucao() - 1);
+
+            if (lista3.get(0).getTempoExecucao() <= 0) {
+                contaLista3 = 0;
+                lista3.remove(0);
+            }
+
+            if (contaLista3 == 8) {
+                contaLista3 = 0;
+                lista4.add(lista3.get(0));
+                lista3.remove(0);
+            }
+        } else if (lista4.size() > 0) {
+
+            contaLista4++;
+
+            lista4.get(0).setTempoExecucao(lista4.get(0).getTempoExecucao() - 1);
+
+            if (lista4.get(0).getTempoExecucao() <= 0) {
+                contaLista3 = 0;
+                lista4.remove(0);
+            }
+
+            if (contaLista4 == 16) {
+                contaLista4 = 0;
+                lista5.add(lista4.get(0));
+                lista4.remove(0);
+            }
+        } else if (lista5.size() > 0) {
+
+            contaLista5++;
+
+            lista5.get(0).setTempoExecucao(lista5.get(0).getTempoExecucao() - 1);
+
+            if (lista5.get(0).getTempoExecucao() <= 0) {
+                contaLista5 = 0;
+                lista5.remove(0);
+            }
+
+            if (contaLista5 == 32) {
+                contaLista5 = 0;
+                lista6.add(lista5.get(0));
+                lista5.remove(0);
+            }
+        } else if (lista6.size() > 0) {
+
+            contaLista6++;
+
+            lista6.get(0).setTempoExecucao(lista6.get(0).getTempoExecucao() - 1);
+
+            if (lista6.get(0).getTempoExecucao() <= 0) {
+                contaLista6 = 0;
+                lista6.remove(0);
+            }
+
+            if (contaLista6 == 64) {
+                contaLista6 = 0;
+                lista7.add(lista6.get(0));
+                lista6.remove(0);
+            }
+        } else if (lista7.size() > 0) {
+
+            contaLista7++;
+
+            lista7.get(0).setTempoExecucao(lista7.get(0).getTempoExecucao() - 1);
+
+            if (lista7.get(0).getTempoExecucao() <= 0) {
+                contaLista7 = 0;
+                lista7.remove(0);
+            }
+
+            if (contaLista7 == 128) {
+                contaLista7 = 0;
+                lista8.add(lista7.get(0));
+                lista7.remove(0);
+            }
+        } else if (lista8.size() > 0) {
+
+            contaLista8++;
+
+            lista8.get(0).setTempoExecucao(lista8.get(0).getTempoExecucao() - 1);
+
+            if (lista8.get(0).getTempoExecucao() <= 0) {
+                contaLista8 = 0;
+                lista8.remove(0);
+            }
+
+            if (contaLista8 == 256) {
+                contaLista8 = 0;
+                lista8.remove(0);
+            }
+
+            if (lista8.size() == 0) {
+                fim = true;
+                JOptionPane.showMessageDialog(null, "Todos os processos foram computados. Fim do escalonador.");
+            }
+        }
+
+        addRowToJTable(tbFila1, lista1);
+        addRowToJTable(tbFila2, lista2);
+        addRowToJTable(tbFila3, lista3);
+        addRowToJTable(tbFila4, lista4);
+        addRowToJTable(tbFila5, lista5);
+        addRowToJTable(tbFila6, lista6);
+        addRowToJTable(tbFila7, lista7);
+        addRowToJTable(tbFila8, lista8);
+
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAutomatico;
@@ -349,8 +585,6 @@ public class ViewEscalonador extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable tbFIlaIO;
     private javax.swing.JTable tbFila1;
     private javax.swing.JTable tbFila2;
@@ -358,5 +592,7 @@ public class ViewEscalonador extends javax.swing.JFrame {
     private javax.swing.JTable tbFila4;
     private javax.swing.JTable tbFila5;
     private javax.swing.JTable tbFila6;
+    private javax.swing.JTable tbFila7;
+    private javax.swing.JTable tbFila8;
     // End of variables declaration//GEN-END:variables
 }
