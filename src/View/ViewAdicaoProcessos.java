@@ -25,7 +25,6 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     private ControllerAdicaoProcessos controllerAdicaoProcessos;
     private int contador;
 
-    private Random gerador = new Random();
 
     public ViewAdicaoProcessos() {
         initComponents();
@@ -261,25 +260,13 @@ public class ViewAdicaoProcessos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnGeraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeraListaActionPerformed
-        for (int j = 0; j < 6; j++) {
-            modelProcesso = new ModelProcesso();
-            
-            int aux = gerador.nextInt(300) + 1;
-            
-            modelProcesso.setNumeroProcesso(contador);
-            modelProcesso.setTempoExecucao(aux);
-            
-            if (aux % 2 == 0) {
-                modelProcesso.setTipoProcesso(false);
-            } else {
-                modelProcesso.setTipoProcesso(true);
-            }
-            
-            controllerAdicaoProcessos.adicionaNaListaController(modelProcesso);
-            contador++;
-            addRowToJTable();
-        }
-
+        contador = 0;
+        listaProcesso.clear();
+        addRowToJTable();
+        
+        controllerAdicaoProcessos.geraLista(contador);
+        
+        addRowToJTable();
     }//GEN-LAST:event_btnGeraListaActionPerformed
 
     /**
