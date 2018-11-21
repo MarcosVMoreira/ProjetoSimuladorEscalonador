@@ -11,4 +11,7 @@ public class ControllerEscalonador {
         listaProcessos = new LinkedList<>(lista);
     }
 
+    
+    
+    
 }

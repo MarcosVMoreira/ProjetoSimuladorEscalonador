@@ -80,7 +80,7 @@
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                                              <Component id="btnGerarQuantum" min="-2" max="-2" attributes="0"/>
+                                              <Component id="btnGerarClock" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Component id="btnAutomatico" min="-2" max="-2" attributes="0"/>
                                           </Group>
@@ -112,7 +112,7 @@
                   <Component id="jScrollPane1" min="-2" pref="139" max="-2" attributes="0"/>
                   <Component id="jScrollPane5" min="-2" pref="139" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnGerarQuantum" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnGerarClock" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnAutomatico" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -381,12 +381,12 @@
         <Property name="text" type="java.lang.String" value="Fila de I/O"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btnGerarQuantum">
+    <Component class="javax.swing.JButton" name="btnGerarClock">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Gerar quantum"/>
+        <Property name="text" type="java.lang.String" value="Gera clock"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGerarQuantumActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGerarClockActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnAutomatico">

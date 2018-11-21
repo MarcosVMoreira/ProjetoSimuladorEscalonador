@@ -25,7 +25,7 @@ public class ControllerAdicaoProcessos {
         for (int j = 0; j < 6; j++) {
             modelProcesso = new ModelProcesso();
 
-            int aux = gerador.nextInt(26) + 1;
+            int aux = gerador.nextInt(25) + 1;
 
             modelProcesso.setNumeroProcesso(contador);
             modelProcesso.setTempoExecucao(aux);
