@@ -426,7 +426,7 @@ public class ViewEscalonador extends javax.swing.JFrame {
         tempoDeExecucao++;
 
         /* ATENCAO: ESSE CODIGO CONTEM ALTO NIVEL DE GAMBIARRAS, DEVIDO A DIFICULDADE DE IMPLEMENTAR TAL ESCALONADOR.
-        TAL CODIGO NAO SERVE DE EXEMPLO PRA NADA, POIS ESTA TOTALMENTE DESPADRONIZADO E CHEIO DE FLAGS
+        TAL CODIGO NAO SERVE DE EXEMPLO PRA NADA, POIS ESTá TOTALMENTE DESPADRONIZADO E CHEIO DE FLAGS
          */
 
  /* logica: terei 8 listas, uma para cada fila. Sempre que eu ciclar e acabar o tempo numa lista,
